@@ -1,12 +1,18 @@
+import os
+import json
 import firebase_admin
 from firebase_admin import credentials, firestore
 
-# Carrega o arquivo de credenciais
-cred = credentials.Certificate("firebase_credentials.json")
+# Carregar do Environment (Vercel)
+firebase_cred_json = os.environ.get("FIREBASE_CREDENTIALS")
+cred_dict = json.loads(firebase_cred_json)
 
-# Inicializa o Firebase, se ainda não estiver inicializado
+# Inicializar o Firebase
+cred = credentials.Certificate(cred_dict)
 if not firebase_admin._apps:
     firebase_admin.initialize_app(cred)
+
+db = firestore.client()
 
 # Acesso ao Firestore
 db = firestore.client()
