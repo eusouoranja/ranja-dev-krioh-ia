@@ -1,18 +1,18 @@
 import os
 import json
 import firebase_admin
-from firebase_admin import credentials, firestore
+from firebase_admin import credentials
 
-# Carregar do Environment (Vercel)
 firebase_cred_json = os.environ.get("FIREBASE_CREDENTIALS")
-cred_dict = json.loads(firebase_cred_json)
 
-# Inicializar o Firebase
+if not firebase_cred_json:
+    raise ValueError("Variável de ambiente FIREBASE_CREDENTIALS está vazia ou não foi definida.")
+
+cred_dict = json.loads(firebase_cred_json)  # <-- é aqui que está quebrando se for vazio
 cred = credentials.Certificate(cred_dict)
+
 if not firebase_admin._apps:
     firebase_admin.initialize_app(cred)
-
-db = firestore.client()
 
 # Acesso ao Firestore
 db = firestore.client()
