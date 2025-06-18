@@ -9,7 +9,9 @@ import streamlit_authenticator as stauth
 load_dotenv()
 
 if not firebase_admin._apps:
-    cred = credentials.Certificate("firebase_credentials.json")
+    import json
+cred_dict = json.loads(os.getenv("FIREBASE_CREDENTIALS"))
+cred = credentials.Certificate(cred_dict)
     firebase_admin.initialize_app(cred)
 db = firestore.client()
 
